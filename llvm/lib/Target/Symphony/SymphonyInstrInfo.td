@@ -8,10 +8,10 @@ def OUTI:IInst<IOMode,IOOpOut, (outs), (ins i16imm:$ArgB), "out\t$ArgB", []>;
 def OUTR:RInst<IOMode,IOOpOut, (outs), (ins GPR:$ArgB), "out\t$ArgB", []>;
 def CONSOLEI:IInst<IOMode,IOOpConsole, (outs), (ins i16imm:$ArgB), "console\t$ArgB", []>;
 def CONSOLER:RInst<IOMode,IOOpConsole, (outs), (ins GPR:$ArgB), "console\t$ArgB", []>;
-def TIME0:DInst<IOMode,IOOpTime0, (outs GPR:$DestR), (ins), "time_1\t$DestR", []>;
-def TIME1:DInst<IOMode,IOOpTime1, (outs GPR:$DestR), (ins), "time_2\t$DestR", []>;
-def TIME2:DInst<IOMode,IOOpTime2, (outs GPR:$DestR), (ins), "time_3\t$DestR", []>;
-def TIME3:DInst<IOMode,IOOpTime3, (outs GPR:$DestR), (ins), "time_4\t$DestR", []>;
+def TIME0:DInst<IOMode,IOOpTime0, (outs GPR:$DestR), (ins), "time_0\t$DestR", []>;
+def TIME1:DInst<IOMode,IOOpTime1, (outs GPR:$DestR), (ins), "time_1\t$DestR", []>;
+def TIME2:DInst<IOMode,IOOpTime2, (outs GPR:$DestR), (ins), "time_2\t$DestR", []>;
+def TIME3:DInst<IOMode,IOOpTime3, (outs GPR:$DestR), (ins), "time_3\t$DestR", []>;
 def COUNTER:DInst<IOMode,IOOpCounter, (outs GPR:$DestR), (ins), "counter\t$DestR", []>;
 def KEYBOARD:DInst<IOMode,IOOpCounter, (outs GPR:$DestR), (ins), "keyboard\t$DestR", []>;
 

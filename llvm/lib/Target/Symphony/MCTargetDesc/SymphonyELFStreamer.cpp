@@ -7,12 +7,14 @@
 
 namespace llvm {
 
-SymphonyELFStreamer::SymphonyELFStreamer(MCStreamer &S, const MCSubtargetInfo &STI)
+SymphonyELFStreamer::SymphonyELFStreamer(MCStreamer &S,
+                                         const MCSubtargetInfo &STI)
     : SymphonyTargetStreamer(S) {
   ELFObjectWriter &W = getStreamer().getWriter();
   unsigned EFlags = W.getELFHeaderEFlags();
 
   W.setELFHeaderEFlags(EFlags);
+  W.IsLittleEndian = false;
 }
 
-}
+} // namespace llvm

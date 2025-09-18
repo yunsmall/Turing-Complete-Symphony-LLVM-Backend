@@ -13,5 +13,6 @@ using namespace llvm::opt;
 
 std::string symphony::getSymphonyTargetCPU(const llvm::opt::ArgList &Args,
                                            const llvm::Triple &Triple) {
-  return "generic";
+  // return "generic";
+  return "";
 }
