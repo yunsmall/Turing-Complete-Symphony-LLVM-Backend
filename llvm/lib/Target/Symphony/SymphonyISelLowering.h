@@ -55,6 +55,8 @@ public:
   SDValue LowerConstant(SDValue Op, SelectionDAG &DAG) const;
   SDValue LowerShiftLeftParts(SDValue Op, SelectionDAG &DAG) const;
   SDValue LowerShiftRightParts(SDValue Op, SelectionDAG &DAG) const;
+  SDValue LowerJumpTable(SDValue Op, SelectionDAG &DAG) const;
+  SDValue LowerBR_JT(SDValue Op, SelectionDAG &DAG) const;
   // SDValue LowerSIGN_EXTEND(SDValue Op, SelectionDAG &DAG) const;
   bool allowsMisalignedMemoryAccesses(EVT, unsigned AddrSpace, Align Alignment,
                                       MachineMemOperand::Flags Flags,

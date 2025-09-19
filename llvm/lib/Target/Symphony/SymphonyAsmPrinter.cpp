@@ -11,8 +11,8 @@ using namespace llvm;
 
 char SymphonyAsmPrinter::ID;
 bool SymphonyAsmPrinter::runOnMachineFunction(MachineFunction &MF) {
-  AsmPrinter::runOnMachineFunction(MF);
-  return true;
+  return AsmPrinter::runOnMachineFunction(MF);
+  // return true;
 }
 void SymphonyAsmPrinter::emitInstruction(const MachineInstr *MI) {
   // if (MCInst OutInst; lowerPseudoInstExpansion(MI, OutInst)) {
@@ -139,6 +139,15 @@ void SymphonyAsmPrinter::lowerToMCInst(const MachineInstr *MI, MCInst &Out) {
       break;
     }
     case MachineOperand::MO_RegisterMask: {
+      break;
+    }
+    case MachineOperand::MO_JumpTableIndex: {
+      const MCExpr *Expr = MCSymbolRefExpr::create(GetJTISymbol(MO.getIndex()), OutContext);
+      // if (!MO.isJTI() && MO.getOffset()) {
+      //   Expr = MCBinaryExpr::createAdd(
+      //       Expr, MCConstantExpr::create(MO.getOffset(), Ctx), Ctx);
+      // }
+      MCOp = MCOperand::createExpr(Expr);
       break;
     }
     default:

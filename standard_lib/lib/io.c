@@ -1,5 +1,9 @@
 #include "io.h"
 
+#define true 1
+#define false 0
+typedef _Bool bool;
+
 char *get_target_ptr_and_inc() {
   unsigned short *p_num = (unsigned short *)CONSOLE_COUNTER_ADDRESS;
   unsigned short num = *p_num;

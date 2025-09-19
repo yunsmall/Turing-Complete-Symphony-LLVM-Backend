@@ -24,7 +24,9 @@ llvm::SymphonyTargetLowering::SymphonyTargetLowering(
   setOperationAction(ISD::BR_CC, MVT::i16, Custom);
   setOperationAction(ISD::BRCOND, MVT::Other, Expand);
 
-  setOperationAction(ISD::JumpTable, MVT::Other, Expand);
+  setOperationAction(ISD::JumpTable, MVT::i16, Custom);
+  setOperationAction(ISD::BR_JT, MVT::Other, Expand);
+  // setOperationAction(ISD::BR_JT, MVT::Other, Custom);
 
   // 浮点
   //  setOperationAction(ISD::FADD,MVT::f)
@@ -267,7 +269,10 @@ SDValue SymphonyTargetLowering::LowerOperation(SDValue Op,
   case ISD::SRL_PARTS:
   case ISD::SRA_PARTS:
     return LowerShiftRightParts(Op, DAG);
-
+  case ISD::JumpTable:
+    return LowerJumpTable(Op, DAG);
+  // case ISD::BR_JT:
+  // return LowerBR_JT(Op, DAG);
   default:
     llvm_unreachable_internal("unknown operation");
   }
@@ -406,6 +411,42 @@ SDValue SymphonyTargetLowering::LowerShiftRightParts(SDValue Op,
   SDValue Ops[2] = {Lo, Hi};
   return DAG.getMergeValues(Ops, dl);
 }
+SDValue SymphonyTargetLowering::LowerJumpTable(SDValue Op,
+                                               SelectionDAG &DAG) const {
+  JumpTableSDNode *JT = cast<JumpTableSDNode>(Op);
+  EVT VT = Op.getValueType();
+  SDLoc dl(Op);
+  // return DAG.getTargetJumpTable(JT->getIndex(), VT);
+  // return DAG.getCopyToReg(VT,dl,)
+  return DAG.getNode(SymphonyISD::WRAPPER, dl, VT,
+                     DAG.getTargetJumpTable(JT->getIndex(), VT));
+}
+// SDValue SymphonyTargetLowering::LowerBR_JT(SDValue Op,
+//                                            SelectionDAG &DAG) const {
+//   SDValue Chain = Op.getOperand(0);
+//   SDValue Table = Op.getOperand(1);    // 跳转表节点，包含跳转表索引
+//   SDValue Index = Op.getOperand(2);    // 这是计算后的偏移量，不是原始case值
+//   SDLoc dl(Op);
+//
+//   // Index 已经是映射到跳转表内的偏移量
+//   // 例如，如果最小case值是10，那么case值10对应偏移量0，20对应1，等等
+//
+//   // 确保索引是16位
+//   Index = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i16, Index);
+//
+//   // 计算跳转表项地址
+//   EVT PTy = getPointerTy(DAG.getDataLayout());
+//   SDValue EntryOffset = DAG.getNode(ISD::MUL, dl, PTy, Index,
+//   DAG.getConstant(2, dl, PTy)); SDValue EntryAddr = DAG.getNode(ISD::ADD, dl,
+//   PTy, Table, EntryOffset);
+//
+//   // 加载目标地址
+//   SDValue TargetAddr = DAG.getLoad(PTy, dl, Chain, EntryAddr,
+//   MachinePointerInfo());
+//
+//   // 创建间接跳转
+//   return DAG.getNode(ISD::BRIND, dl, MVT::Other, Chain, TargetAddr);
+// }
 
 bool SymphonyTargetLowering::allowsMisalignedMemoryAccesses(
     EVT evt, unsigned AddrSpace, Align Alignment,

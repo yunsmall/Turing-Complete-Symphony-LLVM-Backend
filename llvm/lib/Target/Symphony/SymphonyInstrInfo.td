@@ -64,41 +64,36 @@ def jmptarget : Operand<OtherVT>{
 def reljmptarget : Operand<OtherVT>;
 
 
-let ArgA = 0b1111, Uses = [FLAGS], isTerminator = 1 in{
+let ArgA = 0b1111, Uses = [FLAGS], isTerminator = 1, isBranch = 1, isBarrier = 1 in{
 
+let isIndirectBranch  = 1 in{
 def JMPR:RRInst<JMPMode,CondOpJmp,(outs),(ins GPR:$ArgB),"jmp\t$ArgB",[]>;
-def JMPI:RIInst<JMPMode,CondOpJmp,(outs),(ins jmptarget:$ArgB),"jmp\t$ArgB",[]>;
-
 def JER:RRInst<JMPMode,CondOpJe,(outs),(ins GPR:$ArgB),"je\t$ArgB",[]>;
-def JEI:RIInst<JMPMode,CondOpJe,(outs),(ins jmptarget:$ArgB),"je\t$ArgB",[]>;
-
 def JNER:RRInst<JMPMode,CondOpJne,(outs),(ins GPR:$ArgB),"jne\t$ArgB",[]>;
-def JNEI:RIInst<JMPMode,CondOpJne,(outs),(ins jmptarget:$ArgB),"jne\t$ArgB",[]>;
-
 def JLR:RRInst<JMPMode,CondOpJl,(outs),(ins GPR:$ArgB),"jl\t$ArgB",[]>;
-def JLI:RIInst<JMPMode,CondOpJl,(outs),(ins jmptarget:$ArgB),"jl\t$ArgB",[]>;
-
 def JGER:RRInst<JMPMode,CondOpJge,(outs),(ins GPR:$ArgB),"jge\t$ArgB",[]>;
-def JGEI:RIInst<JMPMode,CondOpJge,(outs),(ins jmptarget:$ArgB),"jge\t$ArgB",[]>;
-
 def JLER:RRInst<JMPMode,CondOpJle,(outs),(ins GPR:$ArgB),"jle\t$ArgB",[]>;
-def JLEI:RIInst<JMPMode,CondOpJle,(outs),(ins jmptarget:$ArgB),"jle\t$ArgB",[]>;
-
 def JGR:RRInst<JMPMode,CondOpJg,(outs),(ins GPR:$ArgB),"jg\t$ArgB",[]>;
-def JGI:RIInst<JMPMode,CondOpJg,(outs),(ins jmptarget:$ArgB),"jg\t$ArgB",[]>;
-
 def JBR:RRInst<JMPMode,CondOpJb,(outs),(ins GPR:$ArgB),"jb\t$ArgB",[]>;
-def JBI:RIInst<JMPMode,CondOpJb,(outs),(ins jmptarget:$ArgB),"jb\t$ArgB",[]>;
-
 def JAER:RRInst<JMPMode,CondOpJae,(outs),(ins GPR:$ArgB),"jae\t$ArgB",[]>;
-def JAEI:RIInst<JMPMode,CondOpJae,(outs),(ins jmptarget:$ArgB),"jae\t$ArgB",[]>;
-
 def JBER:RRInst<JMPMode,CondOpJbe,(outs),(ins GPR:$ArgB),"jbe\t$ArgB",[]>;
-def JBEI:RIInst<JMPMode,CondOpJbe,(outs),(ins jmptarget:$ArgB),"jbe\t$ArgB",[]>;
-
 def JAR:RRInst<JMPMode,CondOpJa,(outs),(ins GPR:$ArgB),"ja\t$ArgB",[]>;
+}
+def JMPI:RIInst<JMPMode,CondOpJmp,(outs),(ins jmptarget:$ArgB),"jmp\t$ArgB",[]>;
+def JEI:RIInst<JMPMode,CondOpJe,(outs),(ins jmptarget:$ArgB),"je\t$ArgB",[]>;
+def JNEI:RIInst<JMPMode,CondOpJne,(outs),(ins jmptarget:$ArgB),"jne\t$ArgB",[]>;
+def JLI:RIInst<JMPMode,CondOpJl,(outs),(ins jmptarget:$ArgB),"jl\t$ArgB",[]>;
+def JGEI:RIInst<JMPMode,CondOpJge,(outs),(ins jmptarget:$ArgB),"jge\t$ArgB",[]>;
+def JLEI:RIInst<JMPMode,CondOpJle,(outs),(ins jmptarget:$ArgB),"jle\t$ArgB",[]>;
+def JGI:RIInst<JMPMode,CondOpJg,(outs),(ins jmptarget:$ArgB),"jg\t$ArgB",[]>;
+def JBI:RIInst<JMPMode,CondOpJb,(outs),(ins jmptarget:$ArgB),"jb\t$ArgB",[]>;
+def JAEI:RIInst<JMPMode,CondOpJae,(outs),(ins jmptarget:$ArgB),"jae\t$ArgB",[]>;
+def JBEI:RIInst<JMPMode,CondOpJbe,(outs),(ins jmptarget:$ArgB),"jbe\t$ArgB",[]>;
 def JAI:RIInst<JMPMode,CondOpJa,(outs),(ins jmptarget:$ArgB),"ja\t$ArgB",[]>;
 }
+
+def : Pat<(brind GPR:$dest),(JMPR GPR:$dest)>;
+
 
 //MEM指令
 
@@ -197,6 +192,7 @@ def : Pat<(SymphonyCMOV imm16Pat:$ArgA,imm16Pat:$ArgB,i8:$cond),(CMOVPseudo imm1
 
 
 //其他部分
+def : Pat<(SymphonyWrapper tjumptable:$dest),(MOVI GPR:$dest)>;
 
 //def framidx : Operand<i16>;
 

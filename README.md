@@ -31,9 +31,6 @@ llvm-objcopy.exe -O binary .\test.elf .\test.bin
 ```
 Then load `test.bin` at the RAM in your game.
 
-
-Please add arguments `-fno-builtin -fno-jump-tables` when using clang, `jump table` is not yet implemented. If an IR containing jumptable is generated, the instruction selection fails.
-
 To see the instruction selection details you can add the `--debug` flag to clang to see if it was an instruction selection issue.
 
 If there are instruction selection bugs, changing the program to `unsigned short` will reduce most of the problems.

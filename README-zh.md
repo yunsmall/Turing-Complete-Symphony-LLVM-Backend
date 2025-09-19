@@ -30,9 +30,6 @@ llvm-objcopy.exe -O binary .\test.elf .\test.bin
 ```
 游戏中直接加载`test.bin`即可
 
-使用clang时请添加参数
-`-fno-builtin -fno-jump-tables`，jump table暂时未实现，若生成了包含jumptable的IR会指令选择失败。
-
 想查看指令选择细节可以给clang添加`--debug`参数，可通过此参数查看是否是指令选择的问题。
 
 如果有指令选择的bug就将程序往`unsigned short`类型上修改，能减少绝大多数问题。

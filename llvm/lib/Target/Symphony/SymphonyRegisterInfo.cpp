@@ -88,6 +88,7 @@ bool llvm::SymphonyRegisterInfo::eliminateFrameIndex(
   // }
   if (OpCode == Symphony::frameptrget) {
     Register DestR = MI.getOperand(0).getReg();
+    // MI.getOperand(I).isReg()
     if (Offset > 0) {
       BuildMI(MBB, MI, dl, STI.getInstrInfo()->get(Symphony::ADDI), DestR)
           .addReg(Symphony::SP)
@@ -97,7 +98,7 @@ bool llvm::SymphonyRegisterInfo::eliminateFrameIndex(
           .addReg(Symphony::SP)
           .addImm(-Offset);
     } else {
-      BuildMI(MBB, MI, dl, STI.getInstrInfo()->get(Symphony::MOVI), DestR)
+      BuildMI(MBB, MI, dl, STI.getInstrInfo()->get(Symphony::MOVR), DestR)
           .addReg(Symphony::SP);
     }
     // 直接删掉这个伪指令
